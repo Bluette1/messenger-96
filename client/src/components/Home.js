@@ -24,14 +24,14 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    const { fetchConversations } = this.state;
+    const { fetchConversations } = this.props;
     fetchConversations();
   }
 
   componentDidUpdate(prevProps) {
     const { user: id } = this.props;
-    const { user: { id: prevId } } = prevProps;
-    if (id !== prevId) {
+    const { isLoggedIn } = this.state;
+    if (id !== prevProps.user.id && !isLoggedIn) {
       this.setState({
         isLoggedIn: true,
       });
@@ -39,12 +39,18 @@ class Home extends Component {
   }
 
   handleLogout = async () => {
-    const { logout, user: { id } } = this.props;
+    const {
+      logout,
+      user: { id },
+    } = this.props;
     await logout(id);
   };
 
   render() {
-    const { classes, user: { id } } = this.props;
+    const {
+      classes,
+      user: { id },
+    } = this.props;
     const { isLoggedIn } = this.state;
     if (!id) {
       // If we were previously logged in, redirect to login instead of register
@@ -91,6 +97,7 @@ Home.propTypes = {
   user: PropTypes.objectOf(PropTypes.any).isRequired,
   classes: PropTypes.objectOf(PropTypes.any).isRequired,
   logout: PropTypes.func.isRequired,
+  fetchConversations: PropTypes.func.isRequired,
 };
 
 export default connect(
