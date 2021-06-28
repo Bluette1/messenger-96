@@ -1,0 +1,4 @@
+{
+  "singleQuote": true,
+  "react/jsx-one-expression-per-line": true
+}
