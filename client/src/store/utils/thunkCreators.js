@@ -37,6 +37,7 @@ export const register = credentials => async dispatch => {
   try {
     const { data } = await axios.post('/auth/register', credentials);
     await localStorage.setItem('messenger-token', data.token);
+    await localStorage.setItem('currentUsrId', data.id);
     dispatch(gotUser(data));
     socket.emit('go-online', data.id);
   } catch (error) {
@@ -49,6 +50,7 @@ export const login = credentials => async dispatch => {
   try {
     const { data } = await axios.post('/auth/login', credentials);
     await localStorage.setItem('messenger-token', data.token);
+    await localStorage.setItem('currentUsrId', data.id);
     dispatch(gotUser(data));
     socket.emit('go-online', data.id);
   } catch (error) {

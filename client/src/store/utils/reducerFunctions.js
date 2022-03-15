@@ -1,7 +1,9 @@
 export const addMessageToStore = (state, payload) => {
-  const { message, sender } = payload;
+  const { message, sender, recipientId } = payload;
   // if sender isn't null, that means the message needs to be put in a brand new convo
-  if (sender !== null) {
+  // We also need to check if the recipient is the current user
+  const currentUsrId = localStorage.getItem('currentUsrId');
+  if (sender !== null && recipientId === currentUsrId) {
     const newConvo = {
       id: message.conversationId,
       otherUser: sender,

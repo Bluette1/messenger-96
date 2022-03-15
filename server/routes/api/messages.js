@@ -8,7 +8,6 @@ router.post("/", async(req, res, next) => {
     if (!req.user) {
       return res.sendStatus(401);
     }
-    console.log('here')
     const senderId = req.user.id;
     const { recipientId, text, conversationId, sender } = req.body;
 
@@ -38,7 +37,6 @@ router.post("/", async(req, res, next) => {
       text,
       conversationId: conversation.id,
     });
-    console.log('message', message);
     res.json({ message, sender });
   } catch (error) {
     next(error);
