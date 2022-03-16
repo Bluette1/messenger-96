@@ -87,8 +87,7 @@ async function seed() {
     text: "😂 😂 😂",
   });
 
-  const otherUsers = await Promise.all([
-    ,
+  await Promise.all([
     User.create({
       username: "ashanti",
       email: "ashanti@email.com",

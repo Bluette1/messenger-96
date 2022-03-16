@@ -74,11 +74,11 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
-router.delete("/logout", (req, res, next) => {
+router.delete("/logout", (req, res) => {
   res.sendStatus(204);
 });
 
-router.get("/user", (req, res, next) => {
+router.get("/user", (req, res) => {
   if (req.user) {
     return res.json(req.user);
   } else {
