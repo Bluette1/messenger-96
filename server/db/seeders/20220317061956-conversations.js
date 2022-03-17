@@ -1,15 +1,15 @@
-"use strict";
-const { User } = require("../models");
+'use strict';
+const { User } = require('../models');
 
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    const chiumbo = await User.findOne({ where: { username: "chiumbo" } });
-    const thomas = await User.findOne({ where: { username: "thomas" } });
-    const hualing = await User.findOne({ where: { username: "hualing" } });
-    const santiago = await User.findOne({ where: { username: "santiago" } });
+  async up(queryInterface) {
+    const chiumbo = await User.findOne({ where: { username: 'chiumbo' } });
+    const thomas = await User.findOne({ where: { username: 'thomas' } });
+    const hualing = await User.findOne({ where: { username: 'hualing' } });
+    const santiago = await User.findOne({ where: { username: 'santiago' } });
 
     await queryInterface.bulkInsert(
-      "conversations",
+      'conversations',
       [
         {
           user1Id: chiumbo.id,
@@ -34,7 +34,7 @@ module.exports = {
     );
   },
 
-  async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete("conversations", null, {});
+  async down(queryInterface) {
+    await queryInterface.bulkDelete('conversations', null, {});
   },
 };

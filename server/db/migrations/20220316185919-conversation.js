@@ -8,10 +8,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: {
           model: {
-            tableName: "users",
-            schema: "schema",
+            tableName: 'users',
+            schema: 'schema',
           },
-          key: "id",
+          key: 'id',
         },
         allowNull: false,
       },
@@ -19,17 +19,17 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: {
           model: {
-            tableName: "users",
-            schema: "schema",
+            tableName: 'users',
+            schema: 'schema',
           },
-          key: "id",
+          key: 'id',
         },
         allowNull: false,
       },
      });
   },
 
-  async down (queryInterface, Sequelize) {
+  async down (queryInterface) {
     await queryInterface.dropTable('conversations');
   }
 };

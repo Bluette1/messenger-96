@@ -42,11 +42,14 @@ User.prototype.correctPassword = function (password) {
 };
 
 User.createSalt = function () {
-  return crypto.randomBytes(16).toString('base64');
+  // return crypto.randomBytes(16).toString('base64');
+  console.log('HEre Cryto salt: ', crypto.randomBytes(16).toString('hex'));
+  return crypto.randomBytes(16).toString('hex');
 };
 
 User.encryptPassword = function (plainPassword, salt) {
-  return crypto.createHash('RSA-SHA256').update(plainPassword).update(salt).digest('hex');
+  // return crypto.createHash('sha256').update(plainPassword).update(salt).digest('hex');
+  return crypto.pbkdf2Sync(plainPassword, salt, 1000, 64, 'sha512').toString('hex');
 };
 
 const setSaltAndPassword = (user) => {

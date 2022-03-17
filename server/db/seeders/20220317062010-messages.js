@@ -1,19 +1,19 @@
-"use strict";
+'use strict';
 const { User } = require('../models');
 const Conversation = require('../models/conversation');
 
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    const santiago = await User.findOne({ where: { username: "santiago" } });
-    const thomas = await User.findOne({ where: { username: "thomas" } });
-    const chiumbo = await User.findOne({ where: { username: "chiumbo" } });
-    const hualing = await User.findOne({ where: { username: "hualing" } });
+  async up(queryInterface) {
+    const santiago = await User.findOne({ where: { username: 'santiago' } });
+    const thomas = await User.findOne({ where: { username: 'thomas' } });
+    const chiumbo = await User.findOne({ where: { username: 'chiumbo' } });
+    const hualing = await User.findOne({ where: { username: 'hualing' } });
 
     const santiagoConvo = await Conversation.findOne({ where: { user2Id: santiago.id} });
     const chiumboConvo = await Conversation.findOne({ where: { user1Id: chiumbo.id} });
     const hualingConvo = await Conversation.findOne({ where: { user2Id: hualing.id} });
 
-    await queryInterface.bulkInsert("messages", [{
+    await queryInterface.bulkInsert('messages', [{
       conversationId: santiagoConvo.id,
       senderId: santiago.id,
       text: 'Where are you from?',
@@ -59,7 +59,7 @@ module.exports = {
   ], {});
   },
 
-  async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete("messages", null, {});
+  async down(queryInterface) {
+    await queryInterface.bulkDelete('messages', null, {});
   },
 };
