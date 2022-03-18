@@ -1,16 +1,17 @@
-import React, { Component } from "react";
-import { withStyles } from "@material-ui/core/styles";
-import { Redirect } from "react-router-dom";
-import { connect } from "react-redux";
-import { Grid, CssBaseline, Button } from "@material-ui/core";
-import { SidebarContainer } from "./Sidebar";
-import { ActiveChat } from "./ActiveChat";
-import { logout, fetchConversations } from "../store/utils/thunkCreators";
-import { clearOnLogout } from "../store/index";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Grid, CssBaseline, Button } from '@material-ui/core';
+import { SidebarContainer } from './Sidebar';
+import { ActiveChat } from './ActiveChat';
+import { logout, fetchConversations } from '../store/utils/thunkCreators';
+import { clearOnLogout } from '../store/index';
 
 const styles = {
   root: {
-    height: "97vh",
+    height: '97vh',
   },
 };
 
@@ -22,65 +23,84 @@ class Home extends Component {
     };
   }
 
+  componentDidMount() {
+    const { fetchConversations } = this.props;
+    fetchConversations();
+  }
+
   componentDidUpdate(prevProps) {
-    if (this.props.user.id !== prevProps.user.id) {
+    const { user: id } = this.props;
+    const { isLoggedIn } = this.state;
+    if (id !== prevProps.user.id && !isLoggedIn) {
       this.setState({
         isLoggedIn: true,
       });
     }
   }
 
-  componentDidMount() {
-    this.props.fetchConversations();
-  }
-
   handleLogout = async () => {
-    await this.props.logout(this.props.user.id);
+    const {
+      logout,
+      user: { id },
+    } = this.props;
+    await logout(id);
   };
 
   render() {
-    const { classes } = this.props;
-    if (!this.props.user.id) {
+    const {
+      classes,
+      user: { id },
+    } = this.props;
+    const { isLoggedIn } = this.state;
+    if (!id) {
       // If we were previously logged in, redirect to login instead of register
-      if (this.state.isLoggedIn) return <Redirect to="/login" />;
+      if (isLoggedIn) return <Redirect to="/login" />;
       return <Redirect to="/register" />;
     }
     return (
       <>
+        {' '}
         {/* logout button will eventually be in a dropdown next to username */}
+        {' '}
         <Button className={classes.logout} onClick={this.handleLogout}>
           Logout
+          {' '}
         </Button>
+        {' '}
         <Grid container component="main" className={classes.root}>
           <CssBaseline />
           <SidebarContainer />
           <ActiveChat />
         </Grid>
+        {' '}
       </>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    user: state.user,
-    conversations: state.conversations,
-  };
-};
+const mapStateToProps = state => ({
+  user: state.user,
+  conversations: state.conversations,
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    logout: (id) => {
-      dispatch(logout(id));
-      dispatch(clearOnLogout());
-    },
-    fetchConversations: () => {
-      dispatch(fetchConversations());
-    },
-  };
+const mapDispatchToProps = dispatch => ({
+  logout: id => {
+    dispatch(logout(id));
+    dispatch(clearOnLogout());
+  },
+  fetchConversations: () => {
+    dispatch(fetchConversations());
+  },
+});
+
+Home.propTypes = {
+  user: PropTypes.objectOf(PropTypes.any).isRequired,
+  classes: PropTypes.objectOf(PropTypes.any).isRequired,
+  logout: PropTypes.func.isRequired,
+  fetchConversations: PropTypes.func.isRequired,
 };
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(withStyles(styles)(Home));
