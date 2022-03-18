@@ -64,13 +64,13 @@ const users = [
     createdAt: new Date(),
     updatedAt: new Date(),
   },
-]
+];
 const createSaltAndPassword = function (user) {
   user.salt = createSalt();
   user.password = encryptPassword(user.password, user.salt);
-}
+};
 users.forEach(user => {
-  createSaltAndPassword(user)
+  createSaltAndPassword(user);
 });
 
 module.exports = {
