@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const db = require('../db');
-const crypto = require('crypto');
+const {correctPassword, encryptPassword, createSalt} = require('../../helpers/encrypt');
 
 const User = db.define('user', {
   username: {
@@ -38,15 +38,15 @@ const User = db.define('user', {
 });
 
 User.prototype.correctPassword = function (password) {
-  return User.encryptPassword(password, this.salt()) === this.password();
+  return correctPassword(password, this.salt(), this.password());
 };
 
 User.createSalt = function () {
-  return crypto.randomBytes(16).toString('base64');
+  return createSalt();
 };
 
 User.encryptPassword = function (plainPassword, salt) {
-  return crypto.createHash('sha256').update(plainPassword).update(salt).digest('hex');
+  return encryptPassword(plainPassword, salt);
 };
 
 const setSaltAndPassword = (user) => {
